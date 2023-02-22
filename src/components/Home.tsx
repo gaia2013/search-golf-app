@@ -1,6 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
+import './Common.css'
+
+import DatePicker, { registerLocale } from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import ja from 'date-fns/locale/ja'
 
 const Home = () => {
+  const Today = new Date()
+  const [date, setDate] = useState(Today)
+  registerLocale('ja', ja)
+
   return (
     <div className="ui container" id="container">
       <div className="Search__Form">
@@ -9,7 +18,15 @@ const Home = () => {
             <label>
               <i className="calendar alternate outline icon"></i>プレー日
             </label>
-            <input type="date" />
+            <DatePicker
+              dateFormat="yyyy/MM/dd"
+              locale="ja"
+              selected={date}
+              minDate={Today}
+              onChange={(selectedDate) => {
+                setDate(selectedDate || Today)
+              }}
+            />
           </div>
           <div className="field">
             <label>
