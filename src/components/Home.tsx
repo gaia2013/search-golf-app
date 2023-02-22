@@ -3,17 +3,40 @@ import './Common.css'
 
 import DatePicker, { registerLocale } from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import addDays from 'date-fns/addDays'
 import ja from 'date-fns/locale/ja'
+
+import axios from 'axios'
 
 const Home = () => {
   const Today = new Date()
-  const [date, setDate] = useState(Today)
+  const [date, setDate] = useState<Date>(Today)
+  const [budget, setBudget] = useState<number>(8000)
+  const [departure, setDeparture] = useState<number>(1)
+  const [duration, setDuration] = useState<number>(60)
   registerLocale('ja', ja)
+
+  const onFormSubmit = async (event: { preventDefault: () => void }) => {
+    event.preventDefault()
+    const response = await axios.get(
+      'https://l1kwik11ne.execute-api.ap-northeast-1.amazonaws.com/production/golf-courses',
+      {
+        params: {
+          date: addDays(date, 14),
+          budget: budget,
+          departure: departure,
+          duration: duration,
+        },
+      }
+    )
+    console.log(date, budget, departure, duration)
+    console.log(response)
+  }
 
   return (
     <div className="ui container" id="container">
       <div className="Search__Form">
-        <form className="ui form segment">
+        <form className="ui form segment" onSubmit={onFormSubmit}>
           <div className="field">
             <label>
               <i className="calendar alternate outline icon"></i>プレー日
@@ -32,7 +55,13 @@ const Home = () => {
             <label>
               <i className="yen sign icon"></i>上限金額
             </label>
-            <select name="dropdown" id="" className="ui dropdown">
+            <select
+              name="dropdown"
+              id=""
+              className="ui dropdown"
+              value={budget}
+              onChange={(e) => setBudget(Number(e.target.value))}
+            >
               <option value="8000">8000円 </option>
               <option value="12000">12000</option>
               <option value="16000">16000</option>
@@ -43,7 +72,13 @@ const Home = () => {
               <i className="map pin icon"></i>
               移動時間計算の出発地点（自宅から近い地点をお選びください）
             </label>
-            <select name="dropdown" id="" className="ui dropdown">
+            <select
+              name="dropdown"
+              id=""
+              className="ui dropdown"
+              value={departure}
+              onChange={(e) => setDeparture(Number(e.target.value))}
+            >
               <option value="1">東京駅</option>
               <option value="2">横浜駅</option>
             </select>
@@ -52,7 +87,13 @@ const Home = () => {
             <label htmlFor="">
               <i className="car icon"> </i>車での移動時間の上限
             </label>
-            <select name="dropdown" id="" className="ui dropdown">
+            <select
+              name="dropdown"
+              id=""
+              className="ui dropdown"
+              value={duration}
+              onChange={(e) => setDuration(Number(e.target.value))}
+            >
               <option value="60">60分</option>
               <option value="90">90分</option>
               <option value="120">120分</option>
