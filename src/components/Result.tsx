@@ -4,8 +4,18 @@ import { Plan } from './Home'
 
 type Props = {
   plans: Plan[]
+  plansCount: number | undefined
 }
-const Result: FC<Props> = ({ plans }) => {
+const Result: FC<Props> = ({ plans, plansCount }) => {
+  if (plansCount === 0) {
+    return (
+      <div className="wrapper">
+        <div className="ui orange message">
+          <div className="header">ゴルフ場が見つかりませんでした</div>
+        </div>
+      </div>
+    )
+  }
   const result = plans.map((plan: Plan) => {
     return (
       <div className="item" key={plan.plan_id}>

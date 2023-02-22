@@ -28,6 +28,7 @@ const Home = () => {
   const [departure, setDeparture] = useState<number>(1)
   const [duration, setDuration] = useState<number>(60)
   const [plans, setPlans] = useState<Plan[]>([])
+  const [plansCount, setPlansCount] = useState<number | undefined>()
   registerLocale('ja', ja)
 
   const onFormSubmit = async (event: { preventDefault: () => void }) => {
@@ -44,6 +45,7 @@ const Home = () => {
       }
     )
     setPlans(response.data.plans)
+    setPlansCount(response.data.plansCount)
     console.log(date, budget, departure, duration)
     console.log(response)
   }
@@ -120,7 +122,7 @@ const Home = () => {
             </button>
           </div>
         </form>
-        <Result plans={plans} />
+        <Result plans={plans} plansCount={plansCount} />
       </div>
     </div>
   )
